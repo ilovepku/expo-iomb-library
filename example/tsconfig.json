@@ -1,0 +1,10 @@
+{
+  "extends": "expo/tsconfig.base",
+  "compilerOptions": {
+    "strict": true,
+    "paths": {
+      "expo-iomb-library": ["../src/index"],
+      "expo-iomb-library/*": ["../src/*"]
+    }
+  }
+}
