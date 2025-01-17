@@ -2,6 +2,8 @@
 
 A React Native wrapper for native IOMb SDKs, providing seamless integration with the IOMb analytics and tracking functionality in your Expo/React Native applications.
 
+> **Note**: Currently, this library only supports iOS. Android support is planned for a future release.
+
 ## Features
 
 - 📊 Session configuration and management
@@ -70,7 +72,7 @@ await ExpoIombLibrary.logViewEvent({
 });
 ```
 
-### Set Debug Level (iOS Specific)
+### Set Debug Level (iOS)
 
 ```typescript
 import { IOMBDebugLevel } from "expo-iomb-library";
