@@ -1,48 +1,55 @@
 import ExpoModulesCore
+import IOMbLibrary
+
+// Define payload types for better type safety
+struct SessionConfigurationPayload: Record {
+  @Field var baseURL: String
+  @Field var offerIdentifier: String
+  @Field var hybridIdentifier: String?
+}
+
+struct LogViewEventPayload: Record {
+  @Field var type: String
+  @Field var category: String
+  @Field var comment: String?
+}
 
 public class ExpoIombLibraryModule: Module {
-  // Each module class must implement the definition function. The definition consists of components
-  // that describes the module's functionality and behavior.
-  // See https://docs.expo.dev/modules/module-api for more details about available components.
+  // helper functions
+  private func stringToEnumValue(_ value: String, values: [String]) -> UInt {
+    return UInt(values.firstIndex(where: { $0 == value }) ?? 0)
+  }
+
   public func definition() -> ModuleDefinition {
-    // Sets the name of the module that JavaScript code will use to refer to the module. Takes a string as an argument.
-    // Can be inferred from module's class name, but it's recommended to set it explicitly for clarity.
-    // The module will be accessible from `requireNativeModule('ExpoIombLibrary')` in JavaScript.
     Name("ExpoIombLibrary")
 
-    // Sets constant properties on the module. Can take a dictionary or a closure that returns a dictionary.
-    Constants([
-      "PI": Double.pi
-    ])
+    AsyncFunction("sessionConfiguration") { (payload: SessionConfigurationPayload) -> Void in
+      guard let url = URL(string: payload.baseURL) else { return }
 
-    // Defines event names that the module can send to JavaScript.
-    Events("onChange")
+      let configuration = IOMBSessionConfiguration(
+        offerIdentifier: payload.offerIdentifier,
+        hybridIdentifier: payload.hybridIdentifier,
+        baseURL: url
+      )
 
-    // Defines a JavaScript synchronous function that runs the native code on the JavaScript thread.
-    Function("hello") {
-      return "Hello world! 👋"
+      IOMBSession.defaultSession(for: .iomb).start(with: configuration)
     }
 
-    // Defines a JavaScript function that always returns a Promise and whose native code
-    // is by default dispatched on the different thread than the JavaScript runtime runs on.
-    AsyncFunction("setValueAsync") { (value: String) in
-      // Send an event to JavaScript.
-      self.sendEvent("onChange", [
-        "value": value
-      ])
+    AsyncFunction("terminateSession") { () -> Void in
+      IOMBSession.defaultSession(for: .iomb).terminateSession()
     }
 
-    // Enables the module to be used as a native view. Definition components that are accepted as part of the
-    // view definition: Prop, Events.
-    View(ExpoIombLibraryView.self) {
-      // Defines a setter for the `url` prop.
-      Prop("url") { (view: ExpoIombLibraryView, url: URL) in
-        if view.webView.url != url {
-          view.webView.load(URLRequest(url: url))
-        }
-      }
+    AsyncFunction("logViewEvent") { [self] (payload: LogViewEventPayload) -> Void in
+      let types = ["appeared", "refreshed", "disappeared"]
+      let eventType = IOMBViewEventType(rawValue: stringToEnumValue(payload.type, values: types))!
+      let event = IOMBViewEvent(type: eventType, category: payload.category, comment: payload.comment)
+      IOMBSession.defaultSession(for: .iomb).logEvent(event)
+    }
 
-      Events("onLoad")
+    AsyncFunction("setDebugLogLevel") { [self] (_ level: String) -> Void in
+      let levels = ["off", "error", "warning", "info", "trace"]
+      let level = IOMBDebugLevel(rawValue: Int(stringToEnumValue(level, values: levels)))!
+      IOMBLogging.setDebugLogLevel(level)
     }
   }
 }

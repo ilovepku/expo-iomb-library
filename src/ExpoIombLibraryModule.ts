@@ -1,12 +1,20 @@
-import { NativeModule, requireNativeModule } from 'expo';
+import { NativeModule, requireNativeModule } from "expo";
 
-import { ExpoIombLibraryModuleEvents } from './ExpoIombLibrary.types';
+import {
+  IOMBDebugLevel,
+  SessionConfigPayload,
+  LogViewEventPayload,
+} from "./ExpoIombLibrary.types";
 
-declare class ExpoIombLibraryModule extends NativeModule<ExpoIombLibraryModuleEvents> {
-  PI: number;
-  hello(): string;
-  setValueAsync(value: string): Promise<void>;
+declare class ExpoIombLibraryModule extends NativeModule {
+  sessionConfiguration(payload: SessionConfigPayload): Promise<void>;
+  terminateSession(): Promise<void>;
+  logViewEvent(payload: LogViewEventPayload): Promise<void>;
+  // iOS specific
+  setDebugLogLevel(level: IOMBDebugLevel): Promise<void>;
+  // Android specific
+  setDebugModeEnabled(enable: boolean): Promise<void>;
 }
 
 // This call loads the native module object from the JSI.
-export default requireNativeModule<ExpoIombLibraryModule>('ExpoIombLibrary');
+export default requireNativeModule<ExpoIombLibraryModule>("ExpoIombLibrary");

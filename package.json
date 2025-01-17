@@ -12,14 +12,14 @@
     "prepare": "expo-module prepare",
     "prepublishOnly": "expo-module prepublishOnly",
     "expo-module": "expo-module",
-    "open:ios": "xed example/ios",
-    "open:android": "open -a \"Android Studio\" example/android"
+    "open:ios": "xed example/ios"
   },
   "keywords": [
     "react-native",
     "expo",
-    "expo-iomb-library",
-    "ExpoIombLibrary"
+    "ivw",
+    "infonline",
+    "iomb"
   ],
   "repository": "https://github.com/ilovepku/expo-iomb-library",
   "bugs": {
@@ -30,7 +30,6 @@
   "homepage": "https://github.com/ilovepku/expo-iomb-library#readme",
   "dependencies": {},
   "devDependencies": {
-    "@types/react": "~18.3.12",
     "expo-module-scripts": "^4.0.3",
     "expo": "~52.0.0",
     "react-native": "0.76.0"

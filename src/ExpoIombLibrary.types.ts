@@ -1,19 +1,25 @@
-import type { StyleProp, ViewStyle } from 'react-native';
+export enum IOMBViewEvent {
+  APPEARED = "appeared",
+  REFRESHED = "refreshed",
+  DISAPPEARED = "disappeared",
+}
 
-export type OnLoadEventPayload = {
-  url: string;
-};
+export enum IOMBDebugLevel {
+  OFF = "off",
+  ERROR = "error",
+  WARNING = "warning",
+  INFO = "info",
+  TRACE = "trace",
+}
 
-export type ExpoIombLibraryModuleEvents = {
-  onChange: (params: ChangeEventPayload) => void;
-};
+export interface SessionConfigPayload {
+  baseURL: string;
+  offerIdentifier: string;
+  hybridIdentifier?: string;
+}
 
-export type ChangeEventPayload = {
-  value: string;
-};
-
-export type ExpoIombLibraryViewProps = {
-  url: string;
-  onLoad: (event: { nativeEvent: OnLoadEventPayload }) => void;
-  style?: StyleProp<ViewStyle>;
-};
+export interface LogViewEventPayload {
+  type: IOMBViewEvent;
+  category: string;
+  comment?: string;
+}

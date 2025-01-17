@@ -1,17 +1,6 @@
 {
-  "platforms": [
-    "apple",
-    "android",
-    "web"
-  ],
+  "platforms": ["apple"],
   "apple": {
-    "modules": [
-      "ExpoIombLibraryModule"
-    ]
-  },
-  "android": {
-    "modules": [
-      "expo.modules.iomblibrary.ExpoIombLibraryModule"
-    ]
+    "modules": ["ExpoIombLibraryModule"]
   }
 }
