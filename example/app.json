@@ -23,8 +23,20 @@
       },
       "package": "expo.modules.iomblibrary.example"
     },
-    "web": {
-      "favicon": "./assets/favicon.png"
-    }
+    "plugins": [
+      [
+        "expo-build-properties",
+        {
+          "ios": {
+            "extraPods": [
+              {
+                "name": "IOMbLibrary",
+                "git": "https://<username>:<password>@repo.infonline.de/iom/base/sensors/app/ios.git"
+              }
+            ]
+          }
+        }
+      ]
+    ]
   }
 }

@@ -1,73 +1,64 @@
-import { useEvent } from 'expo';
-import ExpoIombLibrary, { ExpoIombLibraryView } from 'expo-iomb-library';
-import { Button, SafeAreaView, ScrollView, Text, View } from 'react-native';
+import { useEffect } from "react";
+import { StyleSheet, View, Button, Platform } from "react-native";
+import ExpoIombLibrary, {
+  IOMBViewEvent,
+  IOMBDebugLevel,
+} from "expo-iomb-library";
 
 export default function App() {
-  const onChangePayload = useEvent(ExpoIombLibrary, 'onChange');
+  useEffect(() => {
+    const initializeSessionAndLogViewEvent = async () => {
+      try {
+        if (Platform.OS === "ios") {
+          await ExpoIombLibrary.setDebugLogLevel(IOMBDebugLevel.TRACE);
+        }
+
+        await ExpoIombLibrary.sessionConfiguration({
+          baseURL: "<yourBaseURL>",
+          offerIdentifier: "<yourIdentifier>",
+        });
+
+        await ExpoIombLibrary.logViewEvent({
+          type: IOMBViewEvent.APPEARED,
+          category: "home",
+        });
+      } catch (error) {
+        console.error(
+          "Failed to initialize session and log view event:",
+          error
+        );
+      }
+    };
+
+    initializeSessionAndLogViewEvent();
+
+    // Cleanup: terminate session when component unmounts
+    return () => {
+      ExpoIombLibrary.terminateSession();
+    };
+  }, []);
+
+  const handleRefresh = async () => {
+    try {
+      await ExpoIombLibrary.logViewEvent({
+        type: IOMBViewEvent.REFRESHED,
+        category: "MainView",
+        comment: "User triggered refresh",
+      });
+    } catch (error) {
+      console.error("Failed to log refresh view event:", error);
+    }
+  };
 
   return (
-    <SafeAreaView style={styles.container}>
-      <ScrollView style={styles.container}>
-        <Text style={styles.header}>Module API Example</Text>
-        <Group name="Constants">
-          <Text>{ExpoIombLibrary.PI}</Text>
-        </Group>
-        <Group name="Functions">
-          <Text>{ExpoIombLibrary.hello()}</Text>
-        </Group>
-        <Group name="Async functions">
-          <Button
-            title="Set value"
-            onPress={async () => {
-              await ExpoIombLibrary.setValueAsync('Hello from JS!');
-            }}
-          />
-        </Group>
-        <Group name="Events">
-          <Text>{onChangePayload?.value}</Text>
-        </Group>
-        <Group name="Views">
-          <ExpoIombLibraryView
-            url="https://www.example.com"
-            onLoad={({ nativeEvent: { url } }) => console.log(`Loaded: ${url}`)}
-            style={styles.view}
-          />
-        </Group>
-      </ScrollView>
-    </SafeAreaView>
-  );
-}
-
-function Group(props: { name: string; children: React.ReactNode }) {
-  return (
-    <View style={styles.group}>
-      <Text style={styles.groupHeader}>{props.name}</Text>
-      {props.children}
+    <View style={styles.container}>
+      <Button title="Trigger Refresh View Event" onPress={handleRefresh} />
     </View>
   );
 }
 
-const styles = {
-  header: {
-    fontSize: 30,
-    margin: 20,
-  },
-  groupHeader: {
-    fontSize: 20,
-    marginBottom: 20,
-  },
-  group: {
-    margin: 20,
-    backgroundColor: '#fff',
-    borderRadius: 10,
-    padding: 20,
-  },
+const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#eee',
   },
-  view: {
-    flex: 1,
-    height: 200,
-  },
-};
+});
