@@ -1,8 +1,16 @@
 # Expo IOMB Library
 
-A React Native wrapper for native IOMb SDKs, providing seamless integration with the IOMb analytics and tracking functionality in your Expo/React Native applications.
+A React Native wrapper for native IOMb SDKs, providing seamless integration with the IOMb(Census measurement system) analytics and tracking functionality in your Expo/React Native applications.
 
 > **Note**: Currently, this library only supports iOS. Android support is planned for a future release.
+
+## Requirements
+
+- iOS: `minSdkVersion 15.1`
+- Android: Planned for future release
+- Native iOS IOMb library (provided by INFOnline Support)
+
+> **Note**: The native IOMb libraries are not public and will be provided via email from INFOnline Support.
 
 ## Features
 
@@ -19,6 +27,8 @@ npx expo install expo-iomb-library expo-build-properties
 ```
 
 ### Configuration
+
+#### iOS Setup
 
 Add the following to your `app.json`:
 
@@ -67,8 +77,8 @@ import { IOMBViewEvent } from "expo-iomb-library";
 
 await ExpoIombLibrary.logViewEvent({
   type: IOMBViewEvent.APPEARED,
-  category: "Home",
-  comment: "Optional comment",
+  category: "your-category",
+  comment: "your-optional-comment",
 });
 ```
 
@@ -146,6 +156,13 @@ interface LogViewEventPayload {
 ## Example
 
 Check out the [example](./example) directory for a complete working demo of all features.
+
+## Documentation References
+
+For more detailed information about the native SDKs, refer to the official documentation:
+
+- [iOS Documentation](https://docs.infonline.de/infonline-measurement/en/integration/lib/iOS/IOMbLib_iOS_Interface_API/)
+- [Android Documentation](https://docs.infonline.de/infonline-measurement/integration/lib/android/IOMbLib_Android_Interface_API/)
 
 ## Contributing
 

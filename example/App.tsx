@@ -20,7 +20,7 @@ export default function App() {
 
         await ExpoIombLibrary.logViewEvent({
           type: IOMBViewEvent.APPEARED,
-          category: "home",
+          category: "<yourCategory>",
         });
       } catch (error) {
         console.error(
@@ -42,7 +42,7 @@ export default function App() {
     try {
       await ExpoIombLibrary.logViewEvent({
         type: IOMBViewEvent.REFRESHED,
-        category: "MainView",
+        category: "<yourCategory>",
         comment: "User triggered refresh",
       });
     } catch (error) {
