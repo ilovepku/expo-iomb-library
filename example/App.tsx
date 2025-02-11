@@ -5,17 +5,27 @@ import ExpoIombLibrary, {
   IOMBDebugLevel,
 } from "expo-iomb-library";
 
+const isIos = Platform.OS === "ios";
+
+const baseURL = isIos ? "<yourIosBaseURL>" : "<yourAndroidBaseURL>";
+
+const offerIdentifier = isIos
+  ? "<yourIosIdentifier>"
+  : "<yourAndroidIdentifier>";
+
 export default function App() {
   useEffect(() => {
     const initializeSessionAndLogViewEvent = async () => {
       try {
-        if (Platform.OS === "ios") {
+        if (isIos) {
           await ExpoIombLibrary.setDebugLogLevel(IOMBDebugLevel.TRACE);
+        } else {
+          await ExpoIombLibrary.setDebugModeEnabled(true);
         }
 
         await ExpoIombLibrary.sessionConfiguration({
-          baseURL: "<yourBaseURL>",
-          offerIdentifier: "<yourIdentifier>",
+          baseURL,
+          offerIdentifier,
         });
 
         await ExpoIombLibrary.logViewEvent({
@@ -43,7 +53,6 @@ export default function App() {
       await ExpoIombLibrary.logViewEvent({
         type: IOMBViewEvent.REFRESHED,
         category: "<yourCategory>",
-        comment: "User triggered refresh",
       });
     } catch (error) {
       console.error("Failed to log refresh view event:", error);
