@@ -7,8 +7,6 @@ A React Native wrapper for native IOMb SDKs, providing seamless integration with
 - iOS: `minSdkVersion 15.1`
 - Android: `minSdkVersion 21`
 
-> **Note**: The native IOMb libraries are not public and will be provided via email from INFOnline Support.
-
 ## Features
 
 - 📊 Session configuration and management
