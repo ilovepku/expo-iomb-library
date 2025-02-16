@@ -27,23 +27,16 @@
       [
         "expo-build-properties",
         {
+          "android": {
+            "extraMavenRepos": [
+              "https://repo.infonline.de/api/v4/projects/5/packages/maven"
+            ]
+          },
           "ios": {
             "extraPods": [
               {
                 "name": "IOMbLibrary",
-                "git": "https://<username>:<password>@repo.infonline.de/iom/base/sensors/app/ios.git"
-              }
-            ]
-          },
-          "android": {
-            "extraMavenRepos": [
-              {
-                "url": "https://repo.infonline.de/api/v4/projects/5/packages/maven",
-                "credentials": {
-                  "name": "<username>",
-                  "value": "<password>"
-                },
-                "authentication": "header"
+                "git": "https://repo.infonline.de/iom/base/sensors/app/ios.git"
               }
             ]
           }

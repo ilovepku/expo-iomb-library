@@ -6,8 +6,6 @@ A React Native wrapper for native IOMb SDKs, providing seamless integration with
 
 - iOS: `minSdkVersion 15.1`
 - Android: `minSdkVersion 21`
-- Native iOS IOMb library (provided by INFOnline Support)
-- Native Android IOMb library (provided by INFOnline Support)
 
 > **Note**: The native IOMb libraries are not public and will be provided via email from INFOnline Support.
 
@@ -38,23 +36,16 @@ Add the following to your `app.json`:
       [
         "expo-build-properties",
         {
+          "android": {
+            "extraMavenRepos": [
+              "https://repo.infonline.de/api/v4/projects/5/packages/maven"
+            ]
+          },
           "ios": {
             "extraPods": [
               {
                 "name": "IOMbLibrary",
-                "git": "https://<username>:<password>@repo.infonline.de/iom/base/sensors/app/ios.git"
-              }
-            ]
-          },
-          "android": {
-            "extraMavenRepos": [
-              {
-                "url": "https://repo.infonline.de/api/v4/projects/5/packages/maven",
-                "credentials": {
-                  "name": "<username>",
-                  "value": "<password>"
-                },
-                "authentication": "header"
+                "git": "https://repo.infonline.de/iom/base/sensors/app/ios.git"
               }
             ]
           }
@@ -64,8 +55,6 @@ Add the following to your `app.json`:
   }
 }
 ```
-
-Replace `<username>` and `<password>` with your IOMb repository credentials.
 
 ## Usage
 
