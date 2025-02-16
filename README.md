@@ -2,13 +2,12 @@
 
 A React Native wrapper for native IOMb SDKs, providing seamless integration with the IOMb(Census measurement system) analytics and tracking functionality in your Expo/React Native applications.
 
-> **Note**: Currently, this library only supports iOS. Android support is planned for a future release.
-
 ## Requirements
 
 - iOS: `minSdkVersion 15.1`
-- Android: Planned for future release
+- Android: `minSdkVersion 21`
 - Native iOS IOMb library (provided by INFOnline Support)
+- Native Android IOMb library (provided by INFOnline Support)
 
 > **Note**: The native IOMb libraries are not public and will be provided via email from INFOnline Support.
 
@@ -28,7 +27,7 @@ npx expo install expo-iomb-library expo-build-properties
 
 ### Configuration
 
-#### iOS Setup
+#### iOS and Android Setup
 
 Add the following to your `app.json`:
 
@@ -44,6 +43,18 @@ Add the following to your `app.json`:
               {
                 "name": "IOMbLibrary",
                 "git": "https://<username>:<password>@repo.infonline.de/iom/base/sensors/app/ios.git"
+              }
+            ]
+          },
+          "android": {
+            "extraMavenRepos": [
+              {
+                "url": "https://repo.infonline.de/api/v4/projects/5/packages/maven",
+                "credentials": {
+                  "name": "<username>",
+                  "value": "<password>"
+                },
+                "authentication": "header"
               }
             ]
           }
@@ -62,11 +73,20 @@ Replace `<username>` and `<password>` with your IOMb repository credentials.
 
 ```typescript
 import ExpoIombLibrary from "expo-iomb-library";
+import { Platform } from "react-native";
+
+const isIos = Platform.OS === "ios";
+
+const baseURL = isIos ? "<yourIosBaseURL>" : "<yourAndroidBaseURL>";
+
+const offerIdentifier = isIos
+  ? "<yourIosIdentifier>"
+  : "<yourAndroidIdentifier>";
 
 // Configure and start session
 await ExpoIombLibrary.sessionConfiguration({
-  baseURL: "https://your-api-base-url.com",
-  offerIdentifier: "your-offer-id",
+  baseURL,
+  offerIdentifier,
 });
 ```
 
@@ -82,13 +102,16 @@ await ExpoIombLibrary.logViewEvent({
 });
 ```
 
-### Set Debug Level (iOS)
+### Set Debug Level
 
 ```typescript
 import { IOMBDebugLevel } from "expo-iomb-library";
+import { Platform } from "react-native";
 
 if (Platform.OS === "ios") {
   await ExpoIombLibrary.setDebugLogLevel(IOMBDebugLevel.TRACE);
+} else {
+  await ExpoIombLibrary.setDebugModeEnabled(true);
 }
 ```
 
@@ -121,7 +144,12 @@ await ExpoIombLibrary.terminateSession();
 ### Set Debug Log Level (iOS)
 
 - `setDebugLogLevel(level: IOMBDebugLevel)`: Sets debug logging level
-  - Levels: `OFF`, `ERROR`, `WARNING`, `INFO`, `TRACE`
+  - `level`: One of `OFF`, `ERROR`, `WARNING`, `INFO`, `TRACE`
+
+### Set Debug Mode (Android)
+
+- `setDebugModeEnabled(enable: boolean)`: Sets debug mode
+  - `enable`: boolean value to enable or disable debug mode
 
 ## Types
 
